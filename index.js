@@ -1,41 +1,36 @@
-class Finca {
-  constructor(info) {
-    this.id = info.idFinca;
-    this.nombreV = info.nombreVendedor;
-    this.nombreF = info.nombreFinca;
-    this.precio = info.precioFinca;
-  }
+let contenedor = document.getElementById("contenendor");
 
-  hablar() {
-    let mensaje = `Hola los datos de las fincas registradas son los siguientes: ID finca 1: ${idFinca}, Nombre del vendedor: ${nombreVendedor}, Nombre de la finca: ${nombreFinca}, Precio: ${precioFinca}, ID finca 2: ${idFinca2}, Nombre del vendedor: ${nombreVendedor2}, Nombre de la finca: ${nombreFinca2}, Precio: ${precioFinca2}, gracias por usar el portal Fincalaventa.com`;
-    alert(mensaje);
-  }
+let fincas = [];
+
+
+function agregarFinca(objeto) {
+  fincas.push(objeto); 
 }
 
-let idFinca = prompt("Ingresa el ID de la finca");
-let nombreVendedor = prompt("Ingresa el nombre del vendedor");
-let nombreFinca = prompt("Ingresa el nombre de la finca");
-let precioFinca = parseInt(prompt("Ingresa el precio de tu finca"));
+for (let index = 0; index < 3; index++) {
 
-const finca1 = new Finca(idFinca, nombreVendedor, nombreFinca, precioFinca);
-const arregloFinca1 = [idFinca, nombreVendedor, nombreFinca, precioFinca];
+  let nombreVendedor = prompt("Ingresa el nombre del vendedor");
+  let nombreFinca = prompt("Ingresa el nombre de la finca");
+  let precioFinca = parseInt(prompt("Ingresa el precio de tu finca"));
 
-const fincas = [];
-fincas.push(arregloFinca1);
+  let objetoFinca = {
 
-let idFinca2 = prompt("Ingresa el ID de la segunda finca");
-let nombreVendedor2 = prompt("Ingresa el nombre del vendedor");
-let nombreFinca2 = prompt("Ingresa el nombre de la finca");
-let precioFinca2 = parseInt(prompt("Ingresa el precio de tu finca"));
+    ID: fincas.length + 1,
+    nombreDeVendedor: nombreVendedor,
+    nombreDeFinca: nombreFinca,
+    precio: precioFinca
+  };
+agregarFinca(objetoFinca); 
+}
 
-const finca2 = new Finca(idFinca2, nombreVendedor2, nombreFinca2, precioFinca2);
-const arregloFinca2 = [idFinca2, nombreVendedor2, nombreFinca2, precioFinca2];
+for(const finca of fincas){
+  let div = document.createElement("div");
+  div.innerHTML = `
+  <h2>ID: ${finca.ID}</h2>
+  <p>nombreVendedor: ${finca.nombreDeVendedor}</p>
+  <p>nombreFinca: ${finca.nombreDeFinca}</p> 
+  <b>precio: ${finca.precio}</b> 
+  `;
 
-fincas.push(arregloFinca2);
-
-alert(
-  "A continuación te mostramos un resumen de los datos ingressados hasta el momento"
-);
-fincas.forEach((item) => item.forEach((dato) => alert(dato)));
-
-finca1.hablar();
+  contenedor.append(div);
+}
