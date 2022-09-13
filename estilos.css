@@ -22,3 +22,17 @@
 main{
     padding: 3rem;
 }
+
+/* COLORES PARA CADA FINCA */
+.gris{
+    background-color: rgb(193, 192, 192);
+}
+.amarillo{
+    background-color: rgb(202, 202, 100);
+}
+.verde{
+    background-color: rgb(126, 214, 126);
+}
+.azul{
+    background-color: rgb(124, 205, 237);
+}
