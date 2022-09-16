@@ -5,7 +5,7 @@
   padding: 0;
   box-sizing: border-box; }
 
-  main {
+  body {
     min-height: 100vh; }
 
     img {
@@ -19,8 +19,17 @@
     height: 100vh;
 } */
 
-main{
+body{
     padding: 3rem;
+    background-image: url(./assets/img/vinos.jpg);
+   background-repeat: no-repeat;
+   background-size: cover;
+
+}
+
+.text-color{
+    color: blue;
+    
 }
 
 /* COLORES PARA CADA FINCA */
