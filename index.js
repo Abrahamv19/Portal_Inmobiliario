@@ -1,5 +1,5 @@
 /* GENERACION DE SALUDO DE BIENVENIDA ALEATORIO */
-const frases = ["Bienvenido a Fincalaventa.com", "Gracias por visitar Fincalaventa.com", "Es un gusto tenerte en Fincalaventa.com","Si quieres vender o comprar finca, estas en el lugar correcto, Fincalaventa.com"];
+const frases = ["BIENVENIDO A FINCALAVENTA.COM", "GRACIAS POR VISITAR  FINCALAVENTA.COM", "ES UN GUSTO TENERTE EN FINCALAVENTA.COM","EL MEJOR SITIO PARA COMPRAR O VENDER FINCAS, FINCALAVENTA.COM"];
 var randomNumber = Math.floor(Math.random()*frases.length);
 let saludo = frases[randomNumber];
 
@@ -11,7 +11,7 @@ tituloBievenida.append(h1);
 /* ALGORITMO PARA CREAR ARREGLO DE FINCAS Y AGREGAR FINCAS CON FUNCION AGREGARFINCA */
 
 let contenedor = document.getElementById("contenendor");
-
+let filtroBusqueda = document.getElementById("filtroBusqueda");
 
 let fincas = [];
 
@@ -57,3 +57,25 @@ for(const finca of fincas)
   contenedor.append(div);
 }
 
+/* UNA VEZ DESPLEGUE LAS LISTA DE FINCAS EN VENTA, QUIERO QUE SAQUE LAS LISTA DE LAS FINCAS QUE TIENEN UN PRECIO MENOR AL QUE SE PREGUNTA A CONTINUACION */
+
+let filtroFinca = [];
+filtroFinca = fincas;
+
+let precio = parseInt(prompt("Ingrese el precio maximo que esta dispuesto a pagar por una finca"));
+let filtrados = filtroFinca.filter(item => item.precio < precio);
+
+for(const finca of filtrados) 
+{
+  let div2 = document.createElement("div");
+  div2.innerHTML = `
+  <h2>ID: ${finca.ID}</h2>
+  <p>nombreVendedor: ${finca.nombreDeVendedor}</p>
+  <p>nombreFinca: ${finca.nombreDeFinca}</p> 
+  <b>precio: ${finca.precio}</b> 
+  `;
+
+div2.className = "verde"
+
+  filtroBusqueda.append(div2);
+}
