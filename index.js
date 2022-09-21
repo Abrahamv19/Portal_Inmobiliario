@@ -61,6 +61,7 @@ if(localStorage.setItem("favoritos", JSON.stringify(favoritos))){
 
 const items = document.querySelector("#items"); //diferencia entre usa querySelector y getElemntById para traer etiqueta HTML
 const favoritosHTML = document.querySelector("#favoritos");
+const items2 = document.querySelector("#items2");
 
 //*Pintar productos en la tienda
 
@@ -203,3 +204,41 @@ function vaciarFavoritos(){
 }
 const vaciar = document.querySelector("#boton-vaciar");
 vaciar.addEventListener("click", vaciarFavoritos);
+
+/* FILTRAR FINCAS MENOR QUE DETERMINADO PRECIO */
+
+let container2 = document.getElementById("container2");
+let formulario = document.getElementById("formulario");
+
+formulario.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  let inputs = e.target.children;
+  console.log(inputs[0].value);
+
+  let filtrados = fincas.filter(item => item.price < inputs[0].value);
+
+  function renderizarFiltrados() {
+    filtrados.forEach((producto) => {
+      let filtradosHTML = `
+  <div class= "col-12 col-md-6 mb-5 d-flex justify-content-center">
+  <div class="card" style="width: 18rem;">
+    <img src="${producto.img}" class="card-img-top" alt="Card img cap">
+    <div class="card-body">
+      <h5 class="card-title">${producto.title}</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <p> $${producto.price}</p>  
+      <button class= "btn btn-primary" onclick= "agregarProductoAfavoritos(${producto.id})">Añadir a favoritos</button>
+    </div>
+  </div>
+  </div>
+  
+  `;
+  
+      items2.innerHTML += filtradosHTML;
+    });
+  }
+  
+  renderizarFiltrados();
+
+})
