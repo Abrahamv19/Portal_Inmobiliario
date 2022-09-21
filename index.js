@@ -15,32 +15,52 @@ const fincas = [
     id: 1,
     title: "Finca de arroz",
     price: 1000,
-    img: "./assets/img/finca3.jpg",
+    img: "https://res.cloudinary.com/abrahama19/image/upload/v1663269746/finca3_fb8zae.jpg",
   },
   {
     id: 2,
     title: "Finca de caña",
     price: 1800,
-    img: "./assets/img/finca1.jpg",
+    img: "https://res.cloudinary.com/abrahama19/image/upload/v1663269744/finca1_has1qy.jpg",
   },
   {
     id: 3,
     title: "Finca de piña",
     price: 1400,
-    img: "./assets/img/finca2.jpg",
+    img: "https://res.cloudinary.com/abrahama19/image/upload/v1663269742/finca2_ijzocn.jpg",
   },
   {
     id: 4,
     title: "Finca de ganado",
     price: 2400,
-    img: "./assets/img/finca4.jpg",
+    img: "https://res.cloudinary.com/abrahama19/image/upload/v1663344738/finca4_ebswxc.jpg",
+  },
+  {
+    id: 5,
+    title: "Finca de uvas",
+    price: 2600,
+    img: "https://res.cloudinary.com/abrahama19/image/upload/v1663775995/Finca5_vinos_nwdcd7.jpg",
+  },
+  {
+    id: 6,
+    title: "Finca de papa",
+    price: 900,
+    img: "https://res.cloudinary.com/abrahama19/image/upload/v1663776013/Finca6_papa_sc6u9h.jpg",
   },
 ];
 
-let carrito = [];
+let favoritos = [];
 
-const items = document.querySelector("#items");
-const carritoHTML = document.querySelector("#carrito");
+/* Este if deberia recargarme los favoritos del localStorage al refrescar la pagina */
+if(localStorage.setItem("favoritos", JSON.stringify(favoritos))){ 
+  renderizarFavoritos();
+}else{
+  favoritos = []; 
+}
+
+
+const items = document.querySelector("#items"); //diferencia entre usa querySelector y getElemntById para traer etiqueta HTML
+const favoritosHTML = document.querySelector("#favoritos");
 
 //*Pintar productos en la tienda
 
@@ -54,7 +74,7 @@ function renderizarProductos() {
     <h5 class="card-title">${producto.title}</h5>
     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
     <p> $${producto.price}</p>  
-    <button class= "btn btn-primary" onclick= "agregarProductoAlCarrito(${producto.id})">Añadir al carrito</button>
+    <button class= "btn btn-primary" onclick= "agregarProductoAfavoritos(${producto.id})">Añadir a favoritos</button>
   </div>
 </div>
 </div>
@@ -67,32 +87,55 @@ function renderizarProductos() {
 
 renderizarProductos();
 
-//A**ñadir productos al carrito
+//**Añadir productos a favoritos
 //*Identificar que producto eligio
-//*Si el producto ya esta modifico la cantidad  sino lo renderizo
+//*Si el producto ya esta mantengo la cantidad  sino lo renderizo 
 //*Mostrar la informacion del producto
 //*Calcular el total
 
-function agregarProductoAlCarrito(id) {
-  let producto = fincas.find((producto) => producto.id === id);
-  /* console.log(producto); */
-  let productoEnCarrito = carrito.find((producto) => producto.id === id);
 
-  if (productoEnCarrito) {
-    productoEnCarrito.cantidad++;
+function agregarProductoAfavoritos(id) {
+
+  if(localStorage.setItem("favoritos", JSON.stringify(favoritos))){
+
+    favoritos = JSON.parse(localStorage.getItem("favoritos"));
+    let producto = fincas.find((producto) => producto.id === id);
+    let productoEnFavoritos = favoritos.find((producto) => producto.id === id);
+  
+    if (productoEnFavoritos) {
+      productoEnFavoritos.cantidad = 1;
+    } else {
+      producto.cantidad = 1;
+      favoritos.push(producto);
+      
+    }
+
   } else {
-    producto.cantidad = 1;
-    carrito.push(producto);
+    let producto = fincas.find((producto) => producto.id === id);
+    let productoEnFavoritos = favoritos.find((producto) => producto.id === id);
+  
+    if (productoEnFavoritos) {
+      productoEnFavoritos.cantidad = 1;
+    } else {
+      producto.cantidad = 1;
+      favoritos.push(producto);
+      
+    }
+
   }
-  renderizarCarrito();
+  
+  localStorage.setItem("favoritos", JSON.stringify(favoritos))
+  renderizarFavoritos();
   calcularTotal();
 }
 
-function renderizarCarrito() {
-let htmlCarrito = "";
+function renderizarFavoritos() {
 
-  carrito.forEach((prod, id) => {
-    htmlCarrito += `
+favoritos = JSON.parse(localStorage.getItem("favoritos"));
+let htmlFavoritos = "";
+
+  favoritos.forEach((prod, id) => {
+    htmlFavoritos += `
 <div class= "col-12  mb-5 d-flex flex-row justify-content-center">
 <div class="card flex-row" style="width: 18rem;">
 <div>
@@ -101,8 +144,8 @@ let htmlCarrito = "";
   <div class="card-body">
     <h5 class="card-title">${prod.title}</h5>
     <p> $${prod.price}</p>  
-    <p>Cantidad: ${prod.cantidad}</p>  
-    <button class= "btn btn-primary" onclick= "eliminarProductoDelCarrito(${id})">Eliminar</button>
+    
+    <button class= "btn btn-primary" onclick= "eliminarProductoDeFavoritos(${id})">Eliminar</button>
   </div>
 </div>
 </div>
@@ -110,13 +153,15 @@ let htmlCarrito = "";
 `;
   });
 
-  carritoHTML.innerHTML = htmlCarrito;
+  favoritosHTML.innerHTML = htmlFavoritos;
+  localStorage.setItem("favoritos", JSON.stringify(favoritos))
 }
 
 function calcularTotal() {
-let total = 0;
+  favoritos = JSON.parse(localStorage.getItem("favoritos"));
+  let total = 0;
 
-carrito.forEach((prod) => {
+favoritos.forEach((prod) => {
     total += prod.price * prod.cantidad;
 
 });
@@ -125,26 +170,36 @@ console.log(total);
 
 const t = document.getElementById("total");
 t.innerHTML = `<h5>$${total}</h5>`; 
-
+localStorage.setItem("favoritos", JSON.stringify(favoritos))
 }
 
-//**Editar carrito
-//Cuantos hay? Eliminar un producto o vaciar carrito
-function eliminarProductoDelCarrito(id){
-    carrito[id].cantidad--;
+//**Editar favoritos
+//Cuantos hay? Eliminar un producto o vaciar favoritos
+function eliminarProductoDeFavoritos(id){
+    favoritos = JSON.parse(localStorage.getItem("favoritos"));
+
+    favoritos[id].cantidad--;
   
-    if(carrito[id].cantidad === 0) {
-    carrito.splice(id, 1)
+    if(favoritos[id].cantidad === 0) {
+    favoritos.splice(id, 1)
   
     }
-    renderizarCarrito();
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    renderizarFavoritos();
     calcularTotal();
+    
 }
 
-function vaciarCarrito(){
-    carrito = [];
-    renderizarCarrito();
+function vaciarFavoritos(){
+    
+    favoritos = JSON.parse(localStorage.getItem("favoritos"));
+    favoritos = [];
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+
+    renderizarFavoritos();
     calcularTotal();
+    localStorage.clear();
+    
 }
 const vaciar = document.querySelector("#boton-vaciar");
-vaciar.addEventListener("click", vaciarCarrito);
+vaciar.addEventListener("click", vaciarFavoritos);
