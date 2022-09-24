@@ -49,19 +49,16 @@ const fincas = [
   },
 ];
 
+
+
+
 let favoritos = [];
-
-/* Este if deberia recargarme los favoritos del localStorage al refrescar la pagina */
-if(localStorage.setItem("favoritos", JSON.stringify(favoritos))){ 
-  renderizarFavoritos();
-}else{
-  favoritos = []; 
-}
-
-
 const items = document.querySelector("#items"); //diferencia entre usa querySelector y getElemntById para traer etiqueta HTML
 const favoritosHTML = document.querySelector("#favoritos");
 const items2 = document.querySelector("#items2");
+
+
+
 
 //*Pintar productos en la tienda
 
@@ -87,6 +84,16 @@ function renderizarProductos() {
 }
 
 renderizarProductos();
+
+
+
+/* Este if deberia recargarme los favoritos del localStorage al refrescar la pagina */
+if(localStorage.getItem("favoritos", JSON.stringify(favoritos))){ 
+  renderizarFavoritos();
+  calcularTotal();
+}else{
+  favoritos = []; 
+};
 
 //**Añadir productos a favoritos
 //*Identificar que producto eligio
@@ -157,6 +164,8 @@ let htmlFavoritos = "";
   favoritosHTML.innerHTML = htmlFavoritos;
   localStorage.setItem("favoritos", JSON.stringify(favoritos))
 }
+
+
 
 function calcularTotal() {
   favoritos = JSON.parse(localStorage.getItem("favoritos"));
