@@ -1,8 +1,21 @@
+/* SWEETALERT2 MENSAJE DE BIENVENIDA */
+
+Swal.fire({
+  title: 'Hola!!, es un gusto tenerte en Fincalaventa.com',
+  text: 'Presiona Ingresar para continuar',
+  imageUrl: 'https://res.cloudinary.com/abrahama19/image/upload/v1664558859/imagenInicioFincas_tkju4c.jpg',
+  imageWidth: 400,
+  imageHeight: 200,
+  imageAlt: 'Imagen de finca0',
+  confirmButtonText: 'Ingresar',
+  
+})
+
 /* GENERACION DE SALUDO DE BIENVENIDA ALEATORIO */
 const frases = [
   "BIENVENIDO A FINCALAVENTA.COM",
   "GRACIAS POR VISITAR  FINCALAVENTA.COM",
-  "ES UN GUSTO TENERTE EN FINCALAVENTA.COM",
+  "TENEMOS HERMOSAS FINCAS EN VENTA PARA TI!",
   "EL MEJOR SITIO PARA COMPRAR O VENDER FINCAS",
 ];
 
@@ -127,6 +140,16 @@ function agregarProductoAfavoritos(id) {
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
   renderizarFavoritos();
   calcularTotal();
+
+  /* SWEETALERT2 ALERTA DE CONFIRMACION */
+
+  Swal.fire({
+    position: 'center',
+    icon: 'success',
+    title: 'Haz agregado esta finca a favoritos',
+    showConfirmButton: false,
+    timer: 2000,
+  })
 }
 
 /* PINTAR FAVORITOS */
@@ -184,10 +207,50 @@ function eliminarProductoDeFavoritos(id) {
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
   renderizarFavoritos();
   calcularTotal();
+  Swal.fire({
+    position: 'center',
+    icon: 'success',
+    title: 'Haz eliminado esta finca de favoritos',
+    showConfirmButton: false,
+    timer: 2000,
+  })
 }
 
 function vaciarFavoritos() {
-  favoritos = JSON.parse(localStorage.getItem("favoritos"));
+
+  Swal.fire({
+    title: '¿Estas seguro de borrar Favoritos?',
+    text: "No podras reversar esta orden",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Si, borralos!',
+    cancelButtonText: 'No lo hagas'
+
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Favoritos borrados',
+        'La lista ha sido eliminada',
+        'success'
+      )
+
+      favoritos = JSON.parse(localStorage.getItem("favoritos"));
+      favoritos = [];
+      localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    
+      renderizarFavoritos();
+      calcularTotal();
+      localStorage.clear();
+      
+    }
+  })
+}
+const vaciar = document.querySelector("#boton-vaciar");
+vaciar.addEventListener("click", vaciarFavoritos);
+
+/*   favoritos = JSON.parse(localStorage.getItem("favoritos"));
   favoritos = [];
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
 
@@ -196,7 +259,7 @@ function vaciarFavoritos() {
   localStorage.clear();
 }
 const vaciar = document.querySelector("#boton-vaciar");
-vaciar.addEventListener("click", vaciarFavoritos);
+vaciar.addEventListener("click", vaciarFavoritos); */
 
 /* FILTRAR FINCAS MENORES QUE DETERMINADO PRECIO */
 let container2 = document.getElementById("container2");
