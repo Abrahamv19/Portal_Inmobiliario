@@ -27,7 +27,28 @@ let h1 = document.createElement("h1");
 h1.innerHTML = saludo;
 tituloBievenida.append(h1);
 
-/* ALGORITMO PARA CREAR ARREGLO DE FINCAS Y AGREGAR FINCAS CON FUNCION AGREGARFINCA */
+/* AXIOS CON WORLDTIME API */
+let contenedorHora = document.getElementById("contenedorHora");
+
+const getTimeElements = async () => {
+
+    let response = await axios("http://worldtimeapi.org/api/timezone/America/Bogota");
+    let data = response.data.datetime;
+    let data2 = response.data.timezone;
+    let data3 = response.data.day_of_year;
+    const div = document.createElement("div");
+    div.innerHTML = `
+    <p>Zona horaria: ${data2}</p>
+    <p>Fecha y Hora: ${data}</p> 
+    <p>Dia del año: ${data3}</p> 
+    
+    `;
+    contenedorHora.append(div)
+};
+
+getTimeElements();
+
+/*  ARREGLO DE FINCAS EN VENTA*/
 const fincas = [
   {
     id: 1,
@@ -55,7 +76,7 @@ const fincas = [
     title: "Finca de ganado",
     price: 2400,
     img: "https://res.cloudinary.com/abrahama19/image/upload/v1663344738/finca4_ebswxc.jpg",
-    description: "Finca ganadera, clima calido, cerca a cabacera municipal, abundantes fuentes de agua y hermosa casa.",
+    description: "Finca ganadera, clima calido, cerca a cabecera municipal, abundantes fuentes de agua y hermosa casa.",
   },
   {
     id: 5,
@@ -69,9 +90,17 @@ const fincas = [
     title: "Finca de papa",
     price: 900,
     img: "https://res.cloudinary.com/abrahama19/image/upload/v1663776013/Finca6_papa_sc6u9h.jpg",
-    description: "Clima frio, 30 hectares para la venta, actualmente esta toda en producion, precio negociable, animese!.",
+    description: "Clima frio, 30 hectares para la venta, actualmente esta toda en produccion, precio negociable, animese!.",
   },
 ];
+
+
+/* VARIABLES INICIALES */
+
+let favoritos = [];
+const items = document.querySelector("#items");
+const favoritosHTML = document.querySelector("#favoritos");
+const items2 = document.querySelector("#items2");
 
 //DESESTRUCTURACION Y SPREAD PARA PINTAR EL RESUMEN DE FINCAS EN VENTA
 const fincasResumen = [...fincas];
@@ -84,12 +113,6 @@ for (const { id: i, title: ti, price: pr } of fincasResumen) {
   p5.innerHTML = resumenHtml;
   resumen.append(p5);
 }
-
-/* VARIABLES INICIALES */
-let favoritos = [];
-const items = document.querySelector("#items");
-const favoritosHTML = document.querySelector("#favoritos");
-const items2 = document.querySelector("#items2");
 
 //*PINTAR PRODUCTOS EN TIENDA AGREGO OPTIMIZACION CONDICIONAL DE VARIABLES ?
 function renderizarProductos() {
@@ -148,7 +171,7 @@ function agregarProductoAfavoritos(id) {
     icon: 'success',
     title: 'Haz agregado esta finca a favoritos',
     showConfirmButton: false,
-    timer: 2000,
+    timer: 1500,
   })
 }
 
@@ -207,17 +230,21 @@ function eliminarProductoDeFavoritos(id) {
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
   renderizarFavoritos();
   calcularTotal();
+
+  /* SWEETALERT ELIMINAR FINCA DE FAVORITOS */
   Swal.fire({
     position: 'center',
     icon: 'success',
     title: 'Haz eliminado esta finca de favoritos',
     showConfirmButton: false,
-    timer: 2000,
+    timer: 1500,
   })
 }
 
+/* FUNCION VACIAR FAVORITOS */
 function vaciarFavoritos() {
 
+  /* SWEETALERT CONFIRMACION BORRAR FAVORITOS */
   Swal.fire({
     title: '¿Estas seguro de borrar Favoritos?',
     text: "No podras reversar esta orden",
@@ -250,17 +277,6 @@ function vaciarFavoritos() {
 const vaciar = document.querySelector("#boton-vaciar");
 vaciar.addEventListener("click", vaciarFavoritos);
 
-/*   favoritos = JSON.parse(localStorage.getItem("favoritos"));
-  favoritos = [];
-  localStorage.setItem("favoritos", JSON.stringify(favoritos));
-
-  renderizarFavoritos();
-  calcularTotal();
-  localStorage.clear();
-}
-const vaciar = document.querySelector("#boton-vaciar");
-vaciar.addEventListener("click", vaciarFavoritos); */
-
 /* FILTRAR FINCAS MENORES QUE DETERMINADO PRECIO */
 let container2 = document.getElementById("container2");
 let formulario = document.getElementById("formulario");
@@ -281,7 +297,7 @@ formulario.addEventListener("submit", (e) => {
     <img src="${producto?.img}" class="card-img-top" alt="Card img cap">
     <div class="card-body">
       <h5 class="card-title">${producto?.title}</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <p class="card-text">${producto?.description}</p>
       <p> $${producto?.price}</p>  
       <button class= "btn btn-success" onclick= "agregarProductoAfavoritos(${producto.id})">Añadir a favoritos</button>
     </div>

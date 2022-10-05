@@ -12,13 +12,6 @@
         width: 100%; }
 
 
-        /* css HOME */
-
-/* .imagenHome{
-    width: 800px;
-    height: 100vh;
-} */
-
 body{
     padding: 3rem;
     background-image: url(https://res.cloudinary.com/abrahama19/image/upload/v1663797425/Mujer_campo_fondo1_rlh9lk.jpg);
@@ -29,6 +22,22 @@ body{
 
 .text-color{
     color: blue;
+    
+}
+
+.textoApi{
+ text-align:right;  
+ text-decoration:wavy; 
+ font-size: small;
+ font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.textoTitulos{
+    font-family:monospace;
+}
+.textoSubtitulos{
+    font-family:'Courier New', Courier, monospace;
+    text-decoration: underline;
     
 }
 
